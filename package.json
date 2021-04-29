@@ -1,0 +1,14 @@
+{
+  "name": "my-sls",
+  "version": "1.0.0",
+  "description": "Serverless framework. First glance",
+  "main": "handler.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.896.0",
+    "uuid": "^8.3.2"
+  }
+}
