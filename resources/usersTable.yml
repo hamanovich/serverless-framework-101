@@ -1,7 +1,7 @@
 usersTable:
   Type: AWS::DynamoDB::Table
   Properties:
-    TableName: usersTable
+    TableName: usersTable-${self:provider.stage}
     BillingMode: PAY_PER_REQUEST
     AttributeDefinitions:
       - AttributeName: id

@@ -11,6 +11,8 @@ provider:
   lambdaHashingVersion: 20201221
   stage: ${opt:stage, 'dev'}
   region: eu-central-1
+  environment:
+    USERS_TABLE_NAME: ${self:custom.usersTable.name}
   iam:
     role:
       statements:
@@ -25,13 +27,34 @@ functions:
     handler: src/handlers/handler.hello
     events:
       - http:
-          path: hello
-          method: get
+          path: /hello
+          method: GET
 
   createUser:
     handler: src/handlers/createUser.handler
     description: create user handler
     events:
       - http:
-          path: user
-          method: post
+          path: /user
+          method: POST
+
+  getUsers:
+    handler: src/handlers/getUsers.handler
+    description: get all users
+    events:
+      - http:
+          path: /users
+          method: GET
+
+  getUser:
+    handler: src/handlers/getUser.handler
+    description: get one user
+    events:
+      - http:
+          path: /user/{id}
+          method: GET
+
+custom:
+  usersTable:
+    name: !Ref usersTable
+    arn: !GetAtt usersTable.Arn

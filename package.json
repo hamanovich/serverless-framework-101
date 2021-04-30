@@ -8,7 +8,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@middy/core": "^2.1.1",
+    "@middy/http-error-handler": "^2.1.1",
+    "@middy/http-event-normalizer": "^2.1.1",
+    "@middy/http-json-body-parser": "^2.1.1",
     "aws-sdk": "^2.896.0",
+    "http-errors": "^1.8.0",
     "uuid": "^8.3.2"
   }
 }

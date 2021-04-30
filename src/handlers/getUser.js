@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require("uuid");
 const AWS = require("aws-sdk");
 const middy = require("@middy/core");
 const httpJsonBodyParser = require("@middy/http-json-body-parser");
@@ -8,36 +7,35 @@ const createError = require("http-errors");
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-async function createUser(event) {
-  const { email } = event.body;
-  const now = new Date();
-
-  const user = {
-    id: uuidv4(),
-    email,
-    status: "NOT_VERIFIED",
-    createdAt: now.toISOString(),
-  };
+async function getUser(event) {
+  let user;
+  const { id } = event.pathParameters;
 
   try {
-    await dynamodb
-      .put({
+    const result = await dynamodb
+      .get({
         TableName: process.env.USERS_TABLE_NAME,
-        Item: user,
+        Key: { id },
       })
       .promise();
+
+    user = result.Item;
   } catch (error) {
     console.error(error);
     throw new createError.InternalServerError(error);
   }
 
+  if (!user) {
+    throw new createError.NotFound(`User with ID "${id}" not found`);
+  }
+
   return {
-    statusCode: 201,
+    statusCode: 200,
     body: JSON.stringify(user),
   };
 }
 
-module.exports.handler = middy(createUser)
+module.exports.handler = middy(getUser)
   .use(httpJsonBodyParser())
   .use(httpEventNormalizer())
   .use(httpErrorHandler());
